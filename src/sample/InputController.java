@@ -20,7 +20,11 @@ public class InputController
         Task returnTask = new Task();
         returnTask.setName(taskName.getText());
         returnTask.setDetails(taskDetails.getText());
-        returnTask.setDueDate(Date.from(taskDue.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        try {
+            returnTask.setDueDate(Date.from(taskDue.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        } catch (NullPointerException e) {
+
+        }
         return returnTask;
 
     }
