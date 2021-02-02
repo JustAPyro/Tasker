@@ -1,4 +1,11 @@
 package sample;
 
-public class Controller {
+public class Controller
+{
+
+    public void newTaskButton()
+    {
+
+    }
+
 }
