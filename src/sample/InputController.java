@@ -3,6 +3,7 @@ package sample;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.time.ZoneId;
 import java.util.Date;
@@ -24,7 +25,12 @@ public class InputController
 
     }
 
-    public void submitButton() {}
+    public void submitButton() {
+
+        Stage inputWindow = (Stage) submit.getScene().getWindow();
+        inputWindow.close();
+
+    }
 
 
 
