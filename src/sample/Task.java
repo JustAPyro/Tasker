@@ -11,7 +11,7 @@ import java.util.Date;
 public class Task
 {
 
-    String taskName;
+    String name;
     String details;
     Date dueDate;
 
@@ -40,7 +40,28 @@ public class Task
         inputStage.setScene(newScene);
         inputStage.showAndWait();
 
-        Task returnTask = loader.<InputController>getController().getTask();
+        Task returnTask;
+        returnTask = loader.<InputController>getController().getTask();
         return returnTask;
+    }
+
+    // Setters
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

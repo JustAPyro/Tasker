@@ -2,28 +2,26 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.InputController">
    <children>
-      <TextField promptText="Enter Name">
+      <TextField fx:id="taskName" promptText="Enter Name">
          <VBox.margin>
             <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextField>
-      <TextField text="Enter Details">
+      <TextField fx:id="taskDetails" text="Enter Details">
          <VBox.margin>
             <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextField>
-      <DatePicker promptText="Due Date">
+      <DatePicker fx:id="taskDue" promptText="Due Date">
          <VBox.margin>
             <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </DatePicker>
-      <Button alignment="CENTER" mnemonicParsing="false" text="Submit">
+      <Button fx:id="submit" alignment="CENTER" mnemonicParsing="false" onAction="#submitButton" text="Submit">
          <VBox.margin>
             <Insets left="5.0" top="5.0" />
          </VBox.margin>
