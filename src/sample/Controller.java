@@ -23,10 +23,7 @@ public class Controller implements Initializable
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-            while(rs.next()) {
-                System.out.println(rs.getString(2));
-            }
+            ResultSet found = stmt.executeQuery("SELECT user FROM users WHERE user='Luke'");
 
 
         } catch (SQLException throwable) {
