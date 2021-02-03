@@ -44,6 +44,48 @@ public class loginController implements Initializable
 
     }
 
+    private Boolean checkPassword(String desiredPassword)
+    { // Simple method to check the validy of a password
+        if (desiredPassword == null || desiredPassword.length() == 0)
+        { // If they didn't enter a password tell them they have to
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INVALID PASSWORD");
+            alert.setHeaderText(null);
+            alert.setContentText("You must enter a password.");
+            alert.showAndWait();
+            return false;
+        }
+        if (desiredPassword.length() < 8)
+        { // If the desired password is fewer than 8 characters
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INVALID PASSWORD");
+            alert.setHeaderText(null);
+            alert.setContentText("Your password must be at least 8 characters long.");
+            alert.showAndWait();
+            return false;
+        }
+        Boolean num = false, letter = false; // Flags for a letter or number
+        for (int i = 0; i < desiredPassword.length(); i++)
+        { // Checks each character of the desired password
+            if (Character.isDigit(desiredPassword.charAt(i)))
+                num = true;
+            if (Character.isLetter(desiredPassword.charAt(i)))
+                letter = true;
+        }
+        if (num != true || letter != true)
+        { // If there's not a number or letter
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("INVALID PASSWORD");
+            alert.setHeaderText(null);
+            alert.setContentText("Your password must have a letter and a number");
+            alert.showAndWait();
+            return false;
+        }
+
+        return true;
+
+    }
+
     public void register()
     {
         String desiredUser = usernameInput.getText();
@@ -52,27 +94,32 @@ public class loginController implements Initializable
         try {
             Statement stmt = dbConnection.createStatement();
             ResultSet currentUsers = stmt.executeQuery("SELECT username FROM users");
-            Boolean validUser = true;
-            while (currentUsers.next()) {
-                System.out.println(currentUsers.getString(1));
-                if (currentUsers.getString(1).equalsIgnoreCase(desiredUser)) {
-                    validUser = false;
+
+            while (currentUsers.next())
+            { // For each user already in the database
+                if (currentUsers.getString(1).equalsIgnoreCase(desiredUser))
+                { // Check to see if desired username is repeated, ignoring caps
+                    // If so, spawn an alert dialog and return, forcing user to pick a new username.
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("INVALID USERNAME");
+                    alert.setHeaderText(null);
+                    alert.setContentText("This username was already taken, please choose a new one");
+                    alert.showAndWait();
+                    return;
                 }
             }
-            // If the name they picked is invalid,
-            if (validUser == false) {
-                // Create an alert dialog and let them know that this username is invalid and to pick a new one
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("INVALID USERNAME");
-                alert.setHeaderText(null);
-                alert.setContentText("This username was already taken, please choose a new one");
-                alert.showAndWait();
-                return;
+
+            Boolean passwordIsValid = checkPassword(desiredPassword);
+            if (passwordIsValid == false)
+            { // If the password isn't valid
+                return; // Break the loop and wait for them to give us better values
             }
-            else // Otherwise, if it's valid, let's create a new user in our database!
-            {
-               stmt.executeUpdate("INSERT INTO users(id, username, password) VALUES (0,'" + desiredUser +"','"+ desiredPassword +"')");
-            }
+
+
+            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO users (id, username, password) VALUES (0, ?, ?)");
+            pstmt.setString(1, desiredUser);
+            pstmt.setString(2, desiredPassword);
+            pstmt.executeUpdate();
 
             System.out.println("Yay, you have a new user!");
 
