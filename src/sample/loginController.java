@@ -57,11 +57,11 @@ public class loginController implements Initializable
         {
 
 
-            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT username, password, salt FROM users WHERE username=?");
+            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT id, username, password, salt FROM users WHERE username=?");
             pstmt.setString(1, username);
-            ResultSet passSalt = pstmt.executeQuery();
+            ResultSet results = pstmt.executeQuery();
 
-            if (!passSalt.next())
+            if (!results.next())
             {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Unknown User");
@@ -71,25 +71,38 @@ public class loginController implements Initializable
                 return;
             }
 
-            byte[] salt = passSalt.getBytes("salt");
+            byte[] salt = results.getBytes("salt");
 
             MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(passSalt.getBytes("salt"));
+            md.update(results.getBytes("salt"));
 
 
-            if (Arrays.equals(passSalt.getBytes("password"), (md.digest(passwordInput.getText().getBytes())))) {
+            if (Arrays.equals(results.getBytes("password"), (md.digest(passwordInput.getText().getBytes()))))
+            {
+                UserData.setid(results.getInt("id"), results.getString("username"));
+
                 System.out.println("LOGGED IN!");
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Main.fxml"));
+                Scene newScene;
+                newScene = new Scene(loader.load());
+                Stage mainStage = new Stage();
+                mainStage.setScene(newScene);
+                mainStage.setTitle("Tasker");
+                mainStage.show();
+                loginButton.getScene().getWindow().hide();
+
             }
 
 
 
         }
-        catch (SQLException | NoSuchAlgorithmException sqle)
+        catch (SQLException | NoSuchAlgorithmException | IOException sqle)
         {
             sqle.printStackTrace();
         }
 
 
+        /*
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("main.fxml"));
         Scene newScene;
         try {
@@ -98,7 +111,7 @@ public class loginController implements Initializable
             inputStage.setScene(newScene);
         } catch (IOException ex) {
             // TODO: Handle Error
-        }
+        }*/
 
 
     } // Handles signing in users
