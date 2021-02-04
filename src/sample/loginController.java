@@ -1,11 +1,16 @@
 package sample;
 
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,12 +72,6 @@ public class loginController implements Initializable
             }
 
             byte[] salt = passSalt.getBytes("salt");
-            System.out.println("Bytes fetched:");
-            for (int i = 0; i < salt.length; i++) {
-                System.out.print(salt[i] + " ");
-            }
-
-            System.out.println("Salt fetched: " + salt);
 
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(passSalt.getBytes("salt"));
@@ -82,13 +81,25 @@ public class loginController implements Initializable
                 System.out.println("LOGGED IN!");
             }
 
+
+
         }
         catch (SQLException | NoSuchAlgorithmException sqle)
         {
             sqle.printStackTrace();
         }
 
-        System.out.println("Created connection");
+
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("main.fxml"));
+        Scene newScene;
+        try {
+            newScene = new Scene(loader.load());
+            Stage inputStage = new Stage();
+            inputStage.setScene(newScene);
+        } catch (IOException ex) {
+            // TODO: Handle Error
+        }
+
 
     } // Handles signing in users
 
@@ -128,12 +139,6 @@ public class loginController implements Initializable
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(salt);
             byte[] hashedPass = md.digest(passwordInput.getText().getBytes());
-
-            System.out.println("Salt uploaded: ");
-            for (int i = 0; i < salt.length; i++) {
-                System.out.print(salt[i] + " ");
-            }
-            System.out.println();
 
             PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO users (id, username, password, salt) VALUES (0, ?, ?, ?)");
             pstmt.setString(1, desiredUser);

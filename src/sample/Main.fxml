@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
@@ -33,8 +34,17 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <HBox>
+            <HBox alignment="TOP_RIGHT">
                <children>
+                  <Label text="Welcome Luke!">
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Region HBox.hgrow="ALWAYS" />
                   <Button fx:id="newTaskButton" mnemonicParsing="false" onAction="#newTaskButton" text="Add Task">
                      <HBox.margin>
                         <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
@@ -42,7 +52,7 @@
                   </Button>
                   <Button mnemonicParsing="false" text="Mark Completed">
                      <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
