@@ -2,7 +2,6 @@ package sample;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -26,7 +25,7 @@ public class Task
     }
 
 
-    public static Task newTaskPopup(Window window, Controller controller)
+    public static Task newTaskPopup(Window window, MainController controller)
     {
 
         FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("input.fxml"));
