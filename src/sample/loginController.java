@@ -80,11 +80,11 @@ public class loginController implements Initializable
             if (Arrays.equals(results.getBytes("password"), (md.digest(passwordInput.getText().getBytes()))))
             {
                 UserData.setid(results.getInt("id"), results.getString("username"));
-
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Main.fxml"));
                 Scene newScene;
                 newScene = new Scene(loader.load());
                 Stage mainStage = new Stage();
+                UserData.setActiveStage(mainStage);
                 mainStage.setScene(newScene);
                 mainStage.setTitle("Tasker");
                 mainStage.show();

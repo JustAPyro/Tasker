@@ -17,6 +17,10 @@ public class Driver extends Application {
 
     }
 
+    @Override
+    public void stop() throws Exception {
+        UserData.getActiveStage().hide();
+    }
 
     public static void main(String[] args) {
         launch(args);

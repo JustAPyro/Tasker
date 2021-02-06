@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -64,53 +66,105 @@ public class MainController implements Initializable
 
         welcomeLabel.setText("Welcome " + UserData.getUsername() + "!");
 
-        // First Check if System Tray is supported
-        if (!SystemTray.isSupported()) {
-            System.out.println("WAIT, WHAT IN THE WORLD ARE YOU RUNNING THIS ON?");
-            throw new UnsupportedOperationException("GET A PC");
-        }
+        // Sets up the tray icon (using awt code run on swing thread)
+        javax.swing.SwingUtilities.invokeLater(this::addAppToTray);
 
-        SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
-        PopupMenu trayPopupMenu = new PopupMenu();
 
-        MenuItem open = new MenuItem("Open");
-        open.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Stage win = (Stage) welcomeLabel.getScene().getWindow();
-                win.show();
-            }
+    }
 
-        });
-        trayPopupMenu.add(open);
-
-        MenuItem action = new MenuItem("Add Task!");
-        action.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        trayPopupMenu.add(action);
-
-        MenuItem close = new MenuItem("Close");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        trayPopupMenu.add(close);
-
-        TrayIcon trayIcon = new TrayIcon(image, "Tasker", trayPopupMenu);
-        trayIcon.setImageAutoSize(true);
-
+    private void addAppToTray()
+    {
         try {
-            systemTray.add(trayIcon);
-        } catch (AWTException awtException) {
-            awtException.printStackTrace();
-        }
+            System.out.println("Adding");
 
+            // First make sure AWT toolkit is set up
+            java.awt.Toolkit.getDefaultToolkit();
+
+            // Secondly Check if System Tray is supported
+            if (!SystemTray.isSupported()) {
+                System.out.println("WAIT, WHAT IN THE WORLD ARE YOU RUNNING THIS ON?");
+                throw new UnsupportedOperationException("GET A PC");
+            }
+
+            // Set up a system tray icon
+            SystemTray systemTray = SystemTray.getSystemTray();
+            java.awt.Image awtImage = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
+            TrayIcon trayIcon = new TrayIcon(awtImage, "Tasker");
+
+            // If the user double-clicks tray icon, show the main stage
+            trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
+
+            // If the user selects open then show the main stage
+            java.awt.MenuItem openItem = new java.awt.MenuItem("Open");
+            openItem.addActionListener(event -> Platform.runLater(this::showStage));
+
+            java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
+            exitItem.addActionListener(event -> {
+                Platform.exit();
+                systemTray.remove(trayIcon);
+            });
+
+            final PopupMenu trayPopupMenu = new PopupMenu();
+            trayPopupMenu.add(openItem);
+            trayPopupMenu.addSeparator();
+            trayPopupMenu.add(exitItem);
+            trayIcon.setPopupMenu(trayPopupMenu);
+
+            systemTray.add(trayIcon);
+    /*
+            MenuItem open = new MenuItem("Open");
+            open.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Stage win = (Stage) welcomeLabel.getScene().getWindow();
+                    win.show();
+                }
+
+            });
+            trayPopupMenu.add(open);
+
+            MenuItem action = new MenuItem("Add Task!");
+            action.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+
+                }
+            });
+            trayPopupMenu.add(action);
+
+            MenuItem close = new MenuItem("Close");
+            close.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+            trayPopupMenu.add(close);
+
+
+            trayIcon.setImageAutoSize(true);
+
+            try {
+                systemTray.add(trayIcon);
+            } catch (AWTException awtException) {
+                awtException.printStackTrace();
+            }
+            */
+        }
+        catch(java.awt.AWTException e)
+        {
+            System.out.println("unable to init system tray");
+            e.printStackTrace();
+        }
+    }
+
+    private void showStage()
+    {
+        Stage stg = UserData.getActiveStage();
+        if (stg != null)
+        {
+            stg.show();
+            stg.toFront();
+        }
     }
 
     public void newTaskButton()
