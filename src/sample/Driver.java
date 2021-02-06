@@ -14,8 +14,8 @@ public class Driver extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 600, 450));
         primaryStage.show();
-    }
 
+    }
 
 
     public static void main(String[] args) {

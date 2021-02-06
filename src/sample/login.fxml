@@ -54,7 +54,7 @@
       </PasswordField>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="35.0" prefWidth="125.0" text="Sign in">
+            <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="35.0" prefWidth="125.0" text="Sign in">
                <font>
                   <Font size="18.0" />
                </font>

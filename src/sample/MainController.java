@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import javax.swing.*;
@@ -15,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
+
+import static javafx.application.Platform.setImplicitExit;
 
 public class MainController implements Initializable
 {
@@ -27,8 +30,9 @@ public class MainController implements Initializable
     private Connection dbConncection;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources)
-    {
+    public void initialize(URL location, ResourceBundle resources) {
+
+        setImplicitExit(false);
 
         TableColumn<Task, String> column1 = new TableColumn<>("To do:");
         column1.setCellValueFactory(new PropertyValueFactory<>("taskName"));
@@ -45,7 +49,6 @@ public class MainController implements Initializable
 
         taskTable.getItems().add(new Task("Math", "Do stuff", new Date(2021, 10, 2)));
 
-        createConnection();
         loadTasks(UserData.getid(), taskTable);
 
         //Window win = welcomeLabel.getScene().getWindow();
@@ -61,8 +64,8 @@ public class MainController implements Initializable
 
         welcomeLabel.setText("Welcome " + UserData.getUsername() + "!");
 
-        if (!SystemTray.isSupported())
-        {
+        // First Check if System Tray is supported
+        if (!SystemTray.isSupported()) {
             System.out.println("WAIT, WHAT IN THE WORLD ARE YOU RUNNING THIS ON?");
             throw new UnsupportedOperationException("GET A PC");
         }
@@ -71,11 +74,21 @@ public class MainController implements Initializable
         Image image = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
         PopupMenu trayPopupMenu = new PopupMenu();
 
-        MenuItem action = new MenuItem("Hi!");
+        MenuItem open = new MenuItem("Open");
+        open.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Stage win = (Stage) welcomeLabel.getScene().getWindow();
+                win.show();
+            }
+
+        });
+        trayPopupMenu.add(open);
+
+        MenuItem action = new MenuItem("Add Task!");
         action.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                JOptionPane.showMessageDialog(null, "Hello");
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
         trayPopupMenu.add(action);
@@ -83,8 +96,7 @@ public class MainController implements Initializable
         MenuItem close = new MenuItem("Close");
         close.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
@@ -93,23 +105,11 @@ public class MainController implements Initializable
         TrayIcon trayIcon = new TrayIcon(image, "Tasker", trayPopupMenu);
         trayIcon.setImageAutoSize(true);
 
-        try
-        {
+        try {
             systemTray.add(trayIcon);
-        }
-        catch (AWTException awtException)
-        {
+        } catch (AWTException awtException) {
             awtException.printStackTrace();
         }
-
-
-        createConnection();
-    }
-
-    private void createConnection()
-    {
-
-
 
     }
 
@@ -191,6 +191,7 @@ public class MainController implements Initializable
             throwables.printStackTrace();
         }
     }
+
 
 
 }
