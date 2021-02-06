@@ -8,6 +8,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Window;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -25,6 +29,7 @@ public class MainController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+
         TableColumn<Task, String> column1 = new TableColumn<>("To do:");
         column1.setCellValueFactory(new PropertyValueFactory<>("taskName"));
 
@@ -56,6 +61,48 @@ public class MainController implements Initializable
 
         welcomeLabel.setText("Welcome " + UserData.getUsername() + "!");
 
+        if (!SystemTray.isSupported())
+        {
+            System.out.println("WAIT, WHAT IN THE WORLD ARE YOU RUNNING THIS ON?");
+            throw new UnsupportedOperationException("GET A PC");
+        }
+
+        SystemTray systemTray = SystemTray.getSystemTray();
+        Image image = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
+        PopupMenu trayPopupMenu = new PopupMenu();
+
+        MenuItem action = new MenuItem("Hi!");
+        action.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                JOptionPane.showMessageDialog(null, "Hello");
+            }
+        });
+        trayPopupMenu.add(action);
+
+        MenuItem close = new MenuItem("Close");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.exit(0);
+            }
+        });
+        trayPopupMenu.add(close);
+
+        TrayIcon trayIcon = new TrayIcon(image, "Tasker", trayPopupMenu);
+        trayIcon.setImageAutoSize(true);
+
+        try
+        {
+            systemTray.add(trayIcon);
+        }
+        catch (AWTException awtException)
+        {
+            awtException.printStackTrace();
+        }
+
+
         createConnection();
     }
 
@@ -75,7 +122,7 @@ public class MainController implements Initializable
         try
         {
             Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (id, name, details, duedate) VALUES (?, ?, ?, ?)");
+            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (taskid, name, details, duedate) VALUES (?, ?, ?, ?)");
             pstmt.setInt(1, UserData.getid());
             pstmt.setString(2, newTask.getTaskName());
             pstmt.setString(3, newTask.getTaskDetails());
@@ -98,7 +145,7 @@ public class MainController implements Initializable
     {
         try {
             Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT name, details, duedate FROM tasks WHERE id = ?");
+            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT name, details, duedate FROM tasks WHERE userid = ?");
             pstmt.setInt(1, UserData.getid());
             ResultSet taskResults = pstmt.executeQuery();
 
