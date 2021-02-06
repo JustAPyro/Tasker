@@ -81,7 +81,6 @@ public class loginController implements Initializable
             {
                 UserData.setid(results.getInt("id"), results.getString("username"));
 
-                System.out.println("LOGGED IN!");
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Main.fxml"));
                 Scene newScene;
                 newScene = new Scene(loader.load());

@@ -62,10 +62,6 @@
    </top>
    <center>
       <TableView fx:id="taskTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
          <BorderPane.margin>
             <Insets left="20.0" right="20.0" />
          </BorderPane.margin>

@@ -24,6 +24,13 @@ public class Task
 
     }
 
+    public Task(String name, String details, Date dueDate)
+    {
+        this.name = name;
+        this.details = details;
+        this.dueDate = dueDate;
+    }
+
 
     public static Task newTaskPopup(Window window, MainController controller)
     {
@@ -59,6 +66,26 @@ public class Task
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String getTaskName()
+    {
+        return name;
+    }
+
+    public String getTaskDetails()
+    {
+        return details;
+    }
+
+    public String getDueDate()
+    {
+        return dueDate.toString();
+    }
+
+    public Date getDueDateDate()
+    {
+        return dueDate;
     }
 
     @Override
