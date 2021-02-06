@@ -75,21 +75,17 @@ public class MainController implements Initializable
         try
         {
             Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO `tasks`(`id`, `name`, `details`) VALUES (31, 'calc', 'reading')");
-            //pstmt.setInt(1, UserData.getid());
-            //pstmt.setString(2, newTask.getTaskName());
-            //pstmt.setString(3, newTask.getTaskDetails());
-            //java.sql.Date sqlDate = new java.sql.Date(newTask.getDueDateDate().getYear(), newTask.getDueDateDate().getMonth(), newTask.getDueDateDate().getDate());
-            //pstmt.setDate(4, new java.sql.Date(1, 3, 4));
+            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (id, name, details, duedate) VALUES (?, ?, ?, ?)");
+            pstmt.setInt(1, UserData.getid());
+            pstmt.setString(2, newTask.getTaskName());
+            pstmt.setString(3, newTask.getTaskDetails());
+            java.sql.Date sqlDate = new java.sql.Date(newTask.getDueDateDate().getYear(), newTask.getDueDateDate().getMonth(), newTask.getDueDateDate().getDate());
+            pstmt.setDate(4, sqlDate);
             pstmt.executeUpdate();
-            dbConncection.close();
+            //dbConncection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }
-        finally
-        {
-
         }
     }
 
