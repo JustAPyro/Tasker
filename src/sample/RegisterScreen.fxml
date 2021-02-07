@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(from 25px 25px to 700px 700px, #5bc9ff, #163e67);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.RegisterController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="61.0" prefWidth="600.0">
+         <children>
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Logo.png" />
+               </image>
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
+            </ImageView>
+            <Region prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </HBox>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="300.0" text="Welcome to Tasker! Help us get to know you, so we can help you get things done!" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="100.0" right="100.0" />
+         </VBox.margin>
+      </Label>
+      <Label prefHeight="14.0" prefWidth="430.0" text="Let's start with the basics! We'll need a username and password for you to log-in!" wrapText="true">
+         <VBox.margin>
+            <Insets left="50.0" top="25.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="usernameField" promptText="Username">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin></TextField>
+      <PasswordField fx:id="passwordField" promptText="Password">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin>
+      </PasswordField>
+      <PasswordField fx:id="passwordConfirmField" promptText="Confirm Password">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin>
+      </PasswordField>
+      <Label text="Now, what would you like us to call you?">
+         <VBox.margin>
+            <Insets left="50.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="firstNameField" promptText="First Name">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin></TextField>
+      <TextField fx:id="lastNameField" promptText="Last Name">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin></TextField>
+      <Label prefHeight="40.0" prefWidth="492.0" text="Lastly, can we have some contact info? We can use this for account recovery, as well as send you reminders if you'd like!" wrapText="true">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="emailField" promptText="e-mail (optional">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin></TextField>
+      <TextField fx:id="phoneField" promptText="phone (optional)">
+         <VBox.margin>
+            <Insets left="50.0" right="50.0" top="10.0" />
+         </VBox.margin></TextField>
+      <Label text="And, of course, you'll have to check that little box!">
+         <VBox.margin>
+            <Insets left="50.0" top="20.0" />
+         </VBox.margin>
+      </Label>
+      <CheckBox fx:id="checkAgree" mnemonicParsing="false" text="I agree to the Terms of Service and End User License Agreement">
+         <VBox.margin>
+            <Insets bottom="30.0" left="50.0" top="5.0" />
+         </VBox.margin>
+      </CheckBox>
+      <HBox prefHeight="75.0" prefWidth="500.0">
+         <children>
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <Button fx:id="registerButton" alignment="CENTER" mnemonicParsing="false" onAction="#registerNewUser" prefHeight="39.0" prefWidth="140.0" text="Register!">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Region prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

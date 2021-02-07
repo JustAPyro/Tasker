@@ -10,10 +10,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
@@ -23,6 +25,8 @@ import static javafx.application.Platform.setImplicitExit;
 
 public class MainController implements Initializable
 {
+
+    private static final String logoImageLoc = "src/sample/LogoCheck.png";
 
     public Button newTaskButton;
 
@@ -49,7 +53,7 @@ public class MainController implements Initializable
         taskTable.getColumns().add(detailsColumn);
         taskTable.getColumns().add(dueDateColumn);
 
-        taskTable.getItems().add(new Task("Math", "Do stuff", new Date(2021, 10, 2)));
+        //taskTable.getItems().add(new Task("Math", "Do stuff", new Date(2021, 10, 2)));
 
         loadTasks(UserData.getid(), taskTable);
 
@@ -75,7 +79,6 @@ public class MainController implements Initializable
     private void addAppToTray()
     {
         try {
-            System.out.println("Adding");
 
             // First make sure AWT toolkit is set up
             java.awt.Toolkit.getDefaultToolkit();
@@ -86,10 +89,12 @@ public class MainController implements Initializable
                 throw new UnsupportedOperationException("GET A PC");
             }
 
+            final PopupMenu trayPopupMenu = new PopupMenu();
+
             // Set up a system tray icon
             SystemTray systemTray = SystemTray.getSystemTray();
-            java.awt.Image awtImage = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
-            TrayIcon trayIcon = new TrayIcon(awtImage, "Tasker");
+            Image image = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
+            TrayIcon trayIcon = new TrayIcon(image, "Tasker", trayPopupMenu);
 
             // If the user double-clicks tray icon, show the main stage
             trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
@@ -98,62 +103,43 @@ public class MainController implements Initializable
             java.awt.MenuItem openItem = new java.awt.MenuItem("Open");
             openItem.addActionListener(event -> Platform.runLater(this::showStage));
 
+            java.awt.MenuItem newTask = new java.awt.MenuItem("New Task");
+            newTask.addActionListener(event -> Platform.runLater(this::newTaskButton));
+
             java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
             exitItem.addActionListener(event -> {
                 Platform.exit();
                 systemTray.remove(trayIcon);
             });
 
-            final PopupMenu trayPopupMenu = new PopupMenu();
+
             trayPopupMenu.add(openItem);
+            trayPopupMenu.add(newTask);
             trayPopupMenu.addSeparator();
             trayPopupMenu.add(exitItem);
             trayIcon.setPopupMenu(trayPopupMenu);
 
             systemTray.add(trayIcon);
-    /*
-            MenuItem open = new MenuItem("Open");
-            open.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Stage win = (Stage) welcomeLabel.getScene().getWindow();
-                    win.show();
-                }
 
-            });
-            trayPopupMenu.add(open);
-
-            MenuItem action = new MenuItem("Add Task!");
-            action.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-
-                }
-            });
-            trayPopupMenu.add(action);
-
-            MenuItem close = new MenuItem("Close");
-            close.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
-                }
-            });
-            trayPopupMenu.add(close);
-
-
-            trayIcon.setImageAutoSize(true);
-
-            try {
-                systemTray.add(trayIcon);
-            } catch (AWTException awtException) {
-                awtException.printStackTrace();
-            }
-            */
         }
-        catch(java.awt.AWTException e)
+        catch(AWTException e)
         {
             System.out.println("unable to init system tray");
             e.printStackTrace();
+        }
+    }
+
+    protected static Image createImage(String path, String description)
+    {
+        URL imageURL = MainController.class.getResource(path);
+        if (imageURL == null)
+        {
+            System.err.println("Resource not found: " + path);
+            return null;
+        }
+        else
+        {
+            return (new ImageIcon(imageURL, description)).getImage();
         }
     }
 
@@ -169,14 +155,12 @@ public class MainController implements Initializable
 
     public void newTaskButton()
     {
-        System.out.println("Getting new task");
         Task newTask = Task.newTaskPopup(newTaskButton.getScene().getWindow(), this);
         taskTable.getItems().add(newTask);
-        System.out.println(newTask);
         try
         {
             Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (taskid, name, details, duedate) VALUES (?, ?, ?, ?)");
+            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (userid, name, details, duedate) VALUES (?, ?, ?, ?)");
             pstmt.setInt(1, UserData.getid());
             pstmt.setString(2, newTask.getTaskName());
             pstmt.setString(3, newTask.getTaskDetails());
@@ -188,6 +172,17 @@ public class MainController implements Initializable
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    // Removes a task from the database and display
+    public void finishTask()
+    {
+        // Create connection to SQL server
+        //Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+
+        // Create a prepared statement (SQL command) we use prepared to help prevent injections
+        //PreparedStatement pstmt = dbConnection.prepareStatement()
+
     }
 
     public void submit() {
