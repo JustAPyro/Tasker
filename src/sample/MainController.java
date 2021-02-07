@@ -95,6 +95,7 @@ public class MainController implements Initializable
             SystemTray systemTray = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().getImage("src/sample/LogoCheck.png");
             TrayIcon trayIcon = new TrayIcon(image, "Tasker", trayPopupMenu);
+            trayIcon.setImageAutoSize(true);
 
             // If the user double-clicks tray icon, show the main stage
             trayIcon.addActionListener(event -> Platform.runLater(this::showStage));
