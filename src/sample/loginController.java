@@ -117,71 +117,18 @@ public class loginController implements Initializable
 
     public void register()
     {
-        String desiredUser = usernameInput.getText();
-
         try {
-            Statement stmt = dbConnection.createStatement();
-            ResultSet currentUsers = stmt.executeQuery("SELECT username FROM users");
-
-            while (currentUsers.next())
-            { // For each user already in the database
-                if (currentUsers.getString(1).equalsIgnoreCase(desiredUser))
-                { // Check to see if desired username is repeated, ignoring caps
-                    // If so, spawn an alert dialog and return, forcing user to pick a new username.
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("INVALID USERNAME");
-                    alert.setHeaderText(null);
-                    alert.setContentText("This username was already taken, please choose a new one");
-                    alert.showAndWait();
-                    return;
-                }
-            }
-
-            Boolean passwordIsValid = checkPassword();
-            if (passwordIsValid == false)
-            { // If the password isn't valid
-                return; // Break the loop and wait for them to give us better values
-            }
-
-
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-            byte[] salt = new byte[32];
-            sr.nextBytes(salt);
-
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update(salt);
-            byte[] hashedPass = md.digest(passwordInput.getText().getBytes());
-
-            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO users (id, username, password, salt) VALUES (0, ?, ?, ?)");
-            pstmt.setString(1, desiredUser);
-            pstmt.setBytes(2, hashedPass);
-            pstmt.setBytes(3, salt);
-            pstmt.executeUpdate();
-
-
-
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Account Created");
-            alert.setHeaderText(null);
-            alert.setContentText("Account creation successful! You may now use the log-in button.");
-            alert.showAndWait();
-
-            pstmt.close();
-            stmt.close();
-
-
-
-        }
-        catch (SQLException throwables)
-        {
-            throwables.printStackTrace();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("RegisterScreen.fxml"));
+            Scene newScene;
+            newScene = new Scene(loader.load());
+            Stage mainStage = new Stage();
+            UserData.setActiveStage(mainStage);
+            mainStage.setScene(newScene);
+            mainStage.setTitle("Tasker - Register");
+            mainStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     } // Handles registering new users
 

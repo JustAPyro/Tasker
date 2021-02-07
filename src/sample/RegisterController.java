@@ -38,17 +38,12 @@ public class RegisterController implements Initializable
 
         // Try to establish connectivity
         try {
-            // Load the JDBC driver
-            Class.forName("com.mysql.cj.jdbc.driver");
+
 
             // Attempt to establish connection with database
             dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
 
 
-        } catch (ClassNotFoundException e) {
-            // If the drivers cannot be found, let the user know and print a stack trace
-            invalidEntryPopup("Missing Drivers", "Warning: Connection can not be established, JDBC drivers missing");
-            e.printStackTrace(); // TODO: Set this to print to a error file
         }
         catch (SQLException sqle)
         {
@@ -72,9 +67,11 @@ public class RegisterController implements Initializable
         }
 
         // Check if both password boxes match
-        if (passwordField != passwordConfirmField)
+        if (passwordField.getText().equals(passwordConfirmField.getText()) == false)
         {
             invalidEntryPopup("Password Mismatch", "The two passwords entered do not match");
+            System.out.println(passwordField.getText() + "<- Regular");
+            System.out.println(passwordConfirmField.getText() + "<- Confirm");
             return;
         }
 
@@ -120,18 +117,17 @@ public class RegisterController implements Initializable
             // Get the results of username query
             ResultSet currentUsers = getUsernames.executeQuery();
 
-            // Now that we have ResultSet we can close the statement
-            getUsernames.close();
-
             // Iterate through each of the entries in our results
             while (currentUsers.next()) {   // For each username check to see if this equals the new username (Ignoring case)
                 if (currentUsers.getString("username").equalsIgnoreCase(usernameField.getText())) {   // If the two are equal, inform the user they made an invalid entry
                     invalidEntryPopup("Username Taken", "Sorry, this username is already in use! Please pick another one.");
-                    getUsernames.close(); // Close the statement
-                    dbConnection.close(); // Close the DB connection
                     return; // Return
                 }
             }
+
+            // Now that we've checked all of them we can close the results
+            getUsernames.close();
+
         } catch (SQLException sqle) {
             invalidEntryPopup("Connection Error", "Warning: Couldn't establish connection to SQL server");
             sqle.printStackTrace(); // TODO: Set this to print to an error file
@@ -181,6 +177,7 @@ public class RegisterController implements Initializable
             insertNewUser.setBytes(7, saltShaker); // Store the players salt as well
             insertNewUser.executeUpdate();
             insertNewUser.close();
+
         } catch (SQLException sqle) {
             invalidEntryPopup("Connection Error", "Warning: Couldn't establish connection to SQL server");
             sqle.printStackTrace(); // TODO: Set this to print to an error file
@@ -191,6 +188,8 @@ public class RegisterController implements Initializable
         alert.setTitle("Account Created");
         alert.setHeaderText(null);
         alert.setContentText("Account creation successful! You may now sign in!");
+        alert.showAndWait();
+        registerButton.getScene().getWindow().hide();
     }
 
     // Simple pop-up for errors that fail validations
