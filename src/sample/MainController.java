@@ -19,6 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 import static javafx.application.Platform.setImplicitExit;
@@ -165,7 +168,9 @@ public class MainController implements Initializable
             pstmt.setInt(1, UserData.getid());
             pstmt.setString(2, newTask.getTaskName());
             pstmt.setString(3, newTask.getTaskDetails());
-            java.sql.Date sqlDate = new java.sql.Date(newTask.getDueDateDate().getYear(), newTask.getDueDateDate().getMonth(), newTask.getDueDateDate().getDate());
+            ZonedDateTime zdt = newTask.getDueDateDate().atZone(ZoneId.of("America/Boston"));
+            long millis = zdt.toInstant().toEpochMilli();
+            java.sql.Date sqlDate = new java.sql.Date(millis);
             pstmt.setDate(4, sqlDate);
             pstmt.executeUpdate();
             //dbConncection.close();
@@ -210,7 +215,7 @@ public class MainController implements Initializable
 
                 String name = taskResults.getString("name");
                 String details = taskResults.getString("details");
-                Date dueDate = taskResults.getDate("duedate");
+                LocalDateTime dueDate = taskResults.getDate("duedate").toLocalDate().atTime(0, 0);
                 Task retrievedTask = new Task(name, details, dueDate);
 
                 //UserData.addTask(retrievedTask);

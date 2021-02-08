@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Task
@@ -18,20 +19,35 @@ public class Task
     String name; // Name of task
     String details; // Details of task
     String location; // URL or file location of task
-    Date dueDate; // Date task should be done
-    Date createDate; // Date task was created
+    LocalDateTime dueDate; // Date task should be done
+    LocalDateTime createDate; // Date task was created
     int recurring; // Represents how many days task should recur (0 means never)
-
-
 
     public Task()
     {
 
+    }
+
+
+    // Simplest constructor, just requires name and details
+    public Task(String name, String details)
+    {
+        taskid = 0;
+        userid = 0;
+        parentid = 0;
+        isabstract = false;
+
+        this.name = name;
+        this.details = details;
+
+        location = null;
+        dueDate = null;
+       // createDate =
 
 
     }
 
-    public Task(String name, String details, Date dueDate)
+    public Task(String name, String details, LocalDateTime dueDate)
     {
         this.name = name;
         this.details = details;
@@ -76,7 +92,7 @@ public class Task
         this.details = details;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(LocalDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -95,7 +111,7 @@ public class Task
         return dueDate.toString();
     }
 
-    public Date getDueDateDate()
+    public LocalDateTime getDueDateDate()
     {
         return dueDate;
     }

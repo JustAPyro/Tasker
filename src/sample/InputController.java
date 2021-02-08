@@ -5,6 +5,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -20,11 +22,8 @@ public class InputController
         Task returnTask = new Task();
         returnTask.setName(taskName.getText());
         returnTask.setDetails(taskDetails.getText());
-        try {
-            returnTask.setDueDate(Date.from(taskDue.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        } catch (NullPointerException e) {
-
-        }
+        LocalDate date = taskDue.getValue();
+        returnTask.setDueDate(LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), 00, 00));
         return returnTask;
 
     }
