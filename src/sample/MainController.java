@@ -175,6 +175,12 @@ public class MainController implements Initializable
         }
     }
 
+    public void completeTask()
+    {
+        Task task = (Task) taskTable.getSelectionModel().getSelectedItem();
+        System.out.println(task.getTaskName());
+    }
+
     // Removes a task from the database and display
     public void finishTask()
     {

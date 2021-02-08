@@ -11,9 +11,16 @@ import java.util.Date;
 public class Task
 {
 
-    String name;
-    String details;
-    Date dueDate;
+    int taskid; // Unique ID associated with the task
+    int userid; // UserID for who the task belongs to
+    int parentid; // ID of the tasks user/parent if applicable (otherwise 0)
+    boolean isabstract; // If true, this is just a category header
+    String name; // Name of task
+    String details; // Details of task
+    String location; // URL or file location of task
+    Date dueDate; // Date task should be done
+    Date createDate; // Date task was created
+    int recurring; // Represents how many days task should recur (0 means never)
 
 
 
@@ -29,6 +36,11 @@ public class Task
         this.name = name;
         this.details = details;
         this.dueDate = dueDate;
+    }
+
+    public Task(String name)
+    {
+
     }
 
 
