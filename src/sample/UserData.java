@@ -1,8 +1,10 @@
 package sample;
 
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-import java.sql.Date;
+import java.sql.*;
 import java.util.LinkedList;
 
 public class UserData {
@@ -42,6 +44,27 @@ public class UserData {
     public static void addTask(Task task) {
         allTasks.add(task);
     }
+
+    public static void refreshTable(TableView table) throws SQLException {
+
+        
+
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        PreparedStatement pstmt = dbConnection.prepareStatement("SELECT taskid FROM tasks WHERE userid = ?");
+        pstmt.setInt(1, UserData.getid());
+        ResultSet taskIDResults = pstmt.executeQuery();
+
+        while (taskIDResults.next())
+        {
+            taskIDResults.getInt("taskid");
+        }
+
+        ObservableList<Task> tableList = table.getItems();
+        tableList.forEach(task -> {
+
+        });
+    }
+
 
 
 }

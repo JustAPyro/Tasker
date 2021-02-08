@@ -166,19 +166,17 @@ public class MainController implements Initializable
     public void completeTask()
     {
         Task task = (Task) taskTable.getSelectionModel().getSelectedItem();
-        System.out.println(task.getTaskName());
-    }
-
-    // Removes a task from the database and display
-    public void finishTask()
-    {
-        // Create connection to SQL server
-        //Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-
-        // Create a prepared statement (SQL command) we use prepared to help prevent injections
-        //PreparedStatement pstmt = dbConnection.prepareStatement()
+        try
+        {
+            task.removeTask(); // Removes it from database
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
 
     }
+
 
     public void submit() {
 

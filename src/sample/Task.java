@@ -203,7 +203,12 @@ public class Task
 
     }
 
-
+    public void removeTask() throws SQLException {
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        PreparedStatement deletion = dbConnection.prepareStatement("DELETE FROM tasks WHERE taskid=?");
+        deletion.setInt(1, taskid);
+        deletion.executeUpdate();
+    }
 
 
     public Task(String name)
