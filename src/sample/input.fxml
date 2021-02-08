@@ -5,35 +5,46 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="148.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.InputController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="196.0" prefWidth="300.0" spacing="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.InputController">
    <children>
       <TextField fx:id="taskName" promptText="Enter Name">
          <VBox.margin>
             <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextField>
-      <TextField fx:id="taskDetails" text="Enter Details">
+      <TextField fx:id="taskDetails" promptText="Details">
          <VBox.margin>
             <Insets left="5.0" right="5.0" top="5.0" />
          </VBox.margin>
       </TextField>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox>
          <children>
             <DatePicker fx:id="taskDue" prefHeight="25.0" prefWidth="292.0" promptText="Due Date">
                <HBox.margin>
                   <Insets left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
+               <opaqueInsets>
+                  <Insets right="5.0" />
+               </opaqueInsets>
             </DatePicker>
             <ChoiceBox fx:id="timedropdown" prefWidth="150.0">
                <HBox.margin>
                   <Insets right="5.0" top="5.0" />
                </HBox.margin>
+               <opaqueInsets>
+                  <Insets left="5.0" />
+               </opaqueInsets>
             </ChoiceBox>
          </children>
       </HBox>
+      <TextField fx:id="location" promptText="File/URL LOcation">
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
+      </TextField>
       <Button fx:id="submit" alignment="TOP_LEFT" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#submitButton" prefHeight="25.0" prefWidth="290.0" text="Submit" textAlignment="CENTER">
          <VBox.margin>
-            <Insets left="5.0" top="5.0" />
+            <Insets left="5.0" top="20.0" />
          </VBox.margin>
       </Button>
    </children>

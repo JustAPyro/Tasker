@@ -129,6 +129,44 @@ public class Task
 
     }
 
+    // Simple constructor that takes name, details, and due date (Note this pushes to server)
+    public Task(String name, String details, ZonedDateTime duedate, String location)  throws ReferenceNotInitializedException, SQLException {
+        // WORKING ON MAKING THIS USE DUEDATE
+        taskid = 0; // Just setting this to 0 here for sake of completion, it gets overwritten later
+        userid = UserData.getid(); // Set the userid to current static user id
+        parentid = 0; // since not specified, we'll assume this task doesn't have a parent
+        isabstract = false; // Since not specified, we'll assume this isn't an abstracted task
+
+        this.name = name; // Set name equal to the passed parameter
+        this.details = details; // Set details equal to the passed parameter
+
+        this.location = location; // Since not specified, assume there's no given location
+        this.dueDate = duedate; // add the duedate
+        createDate = ZonedDateTime.now(); // Set create date to NOW NOTE: Uses the system clock for timezone
+        recurring = 0; // Since not specified, assume it's not a recurring task
+
+
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+
+        // Create a prepared statement inserting the values we have
+        PreparedStatement insertion = dbConnection.prepareStatement(
+                "INSERT INTO tasks (userid, name, details, location, createdate, duedate) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        insertion.setInt(1, userid); // Set userid
+        insertion.setString(2, name); // Set name
+        insertion.setString(3, details); // set details
+        insertion.setString(4, location);
+        insertion.setTimestamp(5, new Timestamp(createDate.toInstant().toEpochMilli())); // Convert now to timestamp and submit
+        insertion.setTimestamp(6, new Timestamp(duedate.toInstant().toEpochMilli()));
+        insertion.executeUpdate(); // Execute SQL update
+
+        ResultSet rs = insertion.getGeneratedKeys(); // Get the generated values
+        if (rs.next())
+            taskid = rs.getInt(1); // Set taskid to the generated taskID
+
+    }
+
+
+
     // Loads and returns a task from the current set line of a ResultSet
     public static Task loadTask(ResultSet taskSet) throws SQLException {
         if (taskSet.getMetaData().getColumnCount() != 10)

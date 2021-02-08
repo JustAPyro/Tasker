@@ -25,6 +25,7 @@ public class InputController implements Initializable
     public TextField taskDetails;
     public DatePicker taskDue;
     public ChoiceBox timedropdown;
+    public TextField location;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -104,6 +105,14 @@ public class InputController implements Initializable
     {
         try {
 
+            // If name, details, duedate, & location are filled in
+            if (taskName.getText() != null && taskDetails.getText() != null && taskDue.getValue() != null && location.getText() != null)
+            {
+                LocalDateTime local = taskDue.getValue().atTime(getDropDownTime(), 0);
+                ZonedDateTime zonedDueDate = ZonedDateTime.of(local, ZoneId.of("America/New_York"));
+                return new Task(taskName.getText(), taskDetails.getText(), zonedDueDate, location.getText());
+            }
+            // If name, details and date are filled, convert times and ge appropriate constructor
             if (taskDue.getValue() != null && taskName.getText() != null && taskDetails.getText() != null)
             {
                 LocalDateTime local = taskDue.getValue().atTime(getDropDownTime(), 0);
