@@ -34,7 +34,6 @@ public class loginController implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
 
-
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");

@@ -161,23 +161,6 @@ public class MainController implements Initializable
     {
         Task newTask = Task.newTaskPopup(newTaskButton.getScene().getWindow(), this);
         taskTable.getItems().add(newTask);
-        try
-        {
-            Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("INSERT INTO tasks (userid, name, details, duedate) VALUES (?, ?, ?, ?)");
-            pstmt.setInt(1, UserData.getid());
-            pstmt.setString(2, newTask.getTaskName());
-            pstmt.setString(3, newTask.getTaskDetails());
-            ZonedDateTime zdt = newTask.getDueDateDate().atZone(ZoneId.of("America/Boston"));
-            long millis = zdt.toInstant().toEpochMilli();
-            java.sql.Date sqlDate = new java.sql.Date(millis);
-            pstmt.setDate(4, sqlDate);
-            pstmt.executeUpdate();
-            //dbConncection.close();
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 
     public void completeTask()
@@ -206,17 +189,16 @@ public class MainController implements Initializable
     {
         try {
             Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
-            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT name, details, duedate FROM tasks WHERE userid = ?");
+            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT taskid, userid, parentid, abstract, name, details, location, duedate, createdate, recurring FROM tasks WHERE userid = ?");
             pstmt.setInt(1, UserData.getid());
             ResultSet taskResults = pstmt.executeQuery();
 
+            // Iterate through each row of the table
             while (taskResults.next())
             {
 
-                String name = taskResults.getString("name");
-                String details = taskResults.getString("details");
-                LocalDateTime dueDate = taskResults.getDate("duedate").toLocalDate().atTime(0, 0);
-                Task retrievedTask = new Task(name, details, dueDate);
+                // Loads a instance of Task based on the current row of the table
+                Task retrievedTask = Task.loadTask(taskResults);
 
                 //UserData.addTask(retrievedTask);
                 taskView.getItems().add(retrievedTask);
