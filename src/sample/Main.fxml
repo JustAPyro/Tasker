@@ -29,7 +29,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <RadioMenuItem mnemonicParsing="false" selected="true" text="Show Tree" />
+                        <RadioMenuItem fx:id="showTreeCheck" mnemonicParsing="false" onAction="#onShowTreeCheck" text="Show Tree" />
                       <MenuItem mnemonicParsing="false" text="Action 1" />
                     </items>
                   </Menu>

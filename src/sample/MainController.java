@@ -37,6 +37,8 @@ public class MainController implements Initializable
     public TableView taskTable;
     public TreeView taskTree;
 
+    public RadioMenuItem showTreeCheck;
+
     private Connection dbConncection;
 
     @Override
@@ -158,6 +160,28 @@ public class MainController implements Initializable
         {
             stg.show();
             stg.toFront();
+        }
+    }
+
+    // This gets called when the show task tree is selected
+    public void onShowTreeCheck()
+    {
+        // If it was selected
+        if (showTreeCheck.isSelected() == true)
+        {
+            // Set the task tree to be visible
+            taskTree.setVisible(true);
+
+            // Also set it to be managed, so it sizes to the window
+            taskTree.setManaged(true);
+        }
+        else // Otherwise, the task tree should be hidden
+        {
+            // Set the task tree to be hidden
+            taskTree.setVisible(false);
+
+            // Also make it un-managed so it doesn't leave empty space
+            taskTree.setManaged(false);
         }
     }
 
