@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.List;
 
 public class UserData {
 
@@ -45,9 +46,10 @@ public class UserData {
         allTasks.add(task);
     }
 
+    //TODO: Implement this in  O(nlogn) timehg
     public static void refreshTable(TableView table) throws SQLException {
 
-        
+        LinkedList<Integer> databaseIDs = new LinkedList<Integer>();
 
         Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
         PreparedStatement pstmt = dbConnection.prepareStatement("SELECT taskid FROM tasks WHERE userid = ?");
@@ -56,13 +58,17 @@ public class UserData {
 
         while (taskIDResults.next())
         {
-            taskIDResults.getInt("taskid");
+            databaseIDs.add(taskIDResults.getInt("taskid"));
         }
 
-        ObservableList<Task> tableList = table.getItems();
-        tableList.forEach(task -> {
 
-        });
+
+        //int[] databaseList = (int) (databaseIDs.toArray();
+        //int[] tableList = (Task[]) table.getItems().toArray();
+
+
+
+
     }
 
 

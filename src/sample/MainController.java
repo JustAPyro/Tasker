@@ -2,10 +2,9 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -13,6 +12,7 @@ import javafx.stage.Window;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -35,6 +35,7 @@ public class MainController implements Initializable
 
     public Label welcomeLabel;
     public TableView taskTable;
+    public TreeView taskTree;
 
     private Connection dbConncection;
 
@@ -55,6 +56,9 @@ public class MainController implements Initializable
         taskTable.getColumns().add(column1);
         taskTable.getColumns().add(detailsColumn);
         taskTable.getColumns().add(dueDateColumn);
+
+        taskTree.setManaged(false);
+        taskTree.setVisible(false);
 
         //taskTable.getItems().add(new Task("Math", "Do stuff", new Date(2021, 10, 2)));
 
@@ -169,6 +173,11 @@ public class MainController implements Initializable
         try
         {
             task.removeTask(); // Removes it from database
+
+            // Removes it from the database (Later, you may wish to replace this with a update function that also checks the server for updates)
+            taskTable.getItems().removeAll(
+                    taskTable.getSelectionModel().getSelectedItems()
+            );
         }
         catch (SQLException e)
         {
