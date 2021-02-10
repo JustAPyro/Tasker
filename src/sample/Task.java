@@ -92,11 +92,46 @@ public class Task
         if (rs.next())
             taskid = rs.getInt(1); // Set taskid to the generated taskID
 
+        UserData.addTask(this);
+
     }
+
+    // Constructor passing an abstraction (Category)
+    public Task(int parentid, boolean isabstract, String name, String details) throws SQLException {
+        taskid = 0; // Temporary holder
+        userid = UserData.getid(); // Set the userid for the task
+        this.parentid = parentid;
+        this.isabstract = isabstract;
+
+        this.name = name;
+        this.details = details;
+
+        location = null;
+        dueDate = null;
+        createDate = ZonedDateTime.now();
+        recurring = 0;
+
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        PreparedStatement insertion = dbConnection.prepareStatement("INSERT INTO tasks (userid, parentid, abstract, name, details, createdate) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        insertion.setInt(1, userid);
+        insertion.setInt(2, parentid);
+        insertion.setBoolean(3, isabstract);
+        insertion.setString(4, name);
+        insertion.setString(5, details);
+        insertion.setTimestamp(6, new Timestamp(createDate.toInstant().toEpochMilli()));
+        insertion.executeUpdate();
+
+        ResultSet rs = insertion.getGeneratedKeys();
+        if (rs.next())
+            taskid = rs.getInt(1);
+
+        UserData.addTask(this);
+
+    }
+
 
     // Simple constructor that takes name, details, and due date (Note this pushes to server)
     public Task(String name, String details, ZonedDateTime duedate)  throws ReferenceNotInitializedException, SQLException {
-        // WORKING ON MAKING THIS USE DUEDATE
         taskid = 0; // Just setting this to 0 here for sake of completion, it gets overwritten later
         userid = UserData.getid(); // Set the userid to current static user id
         parentid = 0; // since not specified, we'll assume this task doesn't have a parent
@@ -127,6 +162,7 @@ public class Task
         if (rs.next())
             taskid = rs.getInt(1); // Set taskid to the generated taskID
 
+        UserData.addTask(this);
     }
 
     // Simple constructor that takes name, details, and due date (Note this pushes to server)
@@ -163,9 +199,44 @@ public class Task
         if (rs.next())
             taskid = rs.getInt(1); // Set taskid to the generated taskID
 
+        UserData.addTask(this);
     }
 
+    public Task(String name, Task parent, String details, ZonedDateTime duedate) throws ReferenceNotInitializedException, SQLException
+    {
+        taskid = 0; // Just setting this to 0 here for sake of completion, it gets overwritten later
+        userid = UserData.getid(); // Set the userid to current static user id
+        parentid = parent.getTaskID(); // since not specified, we'll assume this task doesn't have a parent
+        isabstract = false; // Since not specified, we'll assume this isn't an abstracted task
 
+        this.name = name; // Set name equal to the passed parameter
+        this.details = details; // Set details equal to the passed parameter
+
+        location = null; // Since not specified, assume there's no given location
+        this.dueDate = duedate; // add the duedate
+        createDate = ZonedDateTime.now(); // Set create date to NOW NOTE: Uses the system clock for timezone
+        recurring = 0; // Since not specified, assume it's not a recurring task
+
+
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+
+        // Create a prepared statement inserting the values we have
+        PreparedStatement insertion = dbConnection.prepareStatement(
+                "INSERT INTO tasks (userid, name, parentid, details, createdate, duedate) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        insertion.setInt(1, userid); // Set userid
+        insertion.setString(2, name); // Set name
+        insertion.setInt(3, parentid); //set parentid
+        insertion.setString(4, details); // set details
+        insertion.setTimestamp(5, new Timestamp(createDate.toInstant().toEpochMilli())); // Convert now to timestamp and submit
+        insertion.setTimestamp(6, new Timestamp(duedate.toInstant().toEpochMilli()));
+        insertion.executeUpdate(); // Execute SQL update
+
+        ResultSet rs = insertion.getGeneratedKeys(); // Get the generated values
+        if (rs.next())
+            taskid = rs.getInt(1); // Set taskid to the generated taskID
+
+        UserData.addTask(this);
+    }
 
     // Loads and returns a task from the current set line of a ResultSet
     public static Task loadTask(ResultSet taskSet) throws SQLException {
@@ -198,7 +269,10 @@ public class Task
 
         int recurring = taskSet.getInt("recurring");
 
-        return new Task(taskID, userID, parentID, isabstract, name, details, location, duedate, createdate, recurring);
+        Task returnTask = new Task(taskID, userID, parentID, isabstract, name, details, location, duedate, createdate, recurring);
+        UserData.addTask(returnTask);
+
+        return returnTask;
 
 
     }
@@ -253,9 +327,30 @@ public class Task
         this.dueDate = dueDate;
     }
 
+    public int getTaskID()
+    {
+        return taskid;
+    }
+
     public String getTaskName()
     {
         return name;
+    }
+
+    // This is the method that's called to get the cell values
+    public String getTaskCategory()
+    {
+        // If parentID = 0, this isn't meant to have a cateogry
+        if (parentid == 0)
+        {
+            // So return empty string
+            return "";
+        }
+        else // Otherwise
+        {
+            // Try and get the name of the parent task and return it
+            return UserData.getTask(parentid).getTaskName();
+        }
     }
 
     public String getTaskDetails()

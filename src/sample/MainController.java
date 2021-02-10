@@ -49,6 +49,9 @@ public class MainController implements Initializable
         TableColumn<Task, String> column1 = new TableColumn<>("To do:");
         column1.setCellValueFactory(new PropertyValueFactory<>("taskName"));
 
+        TableColumn<Task, String> categoryColumn = new TableColumn<>("Category");
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("taskCategory"));
+
         TableColumn<Task, String> detailsColumn = new TableColumn<>("Task Details");
         detailsColumn.setCellValueFactory(new PropertyValueFactory<>("taskDetails"));
 
@@ -56,6 +59,7 @@ public class MainController implements Initializable
         dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
 
         taskTable.getColumns().add(column1);
+        taskTable.getColumns().add(categoryColumn);
         taskTable.getColumns().add(detailsColumn);
         taskTable.getColumns().add(dueDateColumn);
 

@@ -2,10 +2,7 @@ package sample;
 
 import com.sun.org.apache.xml.internal.security.signature.ReferenceNotInitializedException;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 public class InputController implements Initializable
@@ -26,6 +24,8 @@ public class InputController implements Initializable
     public DatePicker taskDue;
     public ChoiceBox timedropdown;
     public TextField location;
+    public ComboBox parentComboBox;
+    public CheckBox abstractionBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -33,6 +33,9 @@ public class InputController implements Initializable
         timedropdown.getItems().clear();
         timedropdown.getItems().addAll("1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 AM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM",  "8 PM", "9 PM", "10 PM", "11 PM", "12 PM");
         timedropdown.getSelectionModel().select("12 PM");
+
+
+        parentComboBox.getItems().addAll(UserData.getAllTasks());
     }
 
 
@@ -105,6 +108,24 @@ public class InputController implements Initializable
     {
         try {
 
+
+            if (abstractionBox.isSelected())
+            {
+                int parentid = 0;
+                if (parentComboBox.getValue() != null)
+                {
+                    parentid = ((Task) parentComboBox.getValue()).getTaskID();
+                }
+                return new Task(parentid, true, taskName.getText(), taskDetails.getText());
+            }
+
+            if (taskName.getText() != null && parentComboBox.getValue() != null && taskDetails.getText() != null & taskDue.getValue() != null)
+            {
+                LocalDateTime local = taskDue.getValue().atTime(getDropDownTime(), 0);
+                ZonedDateTime zonedDueDate = ZonedDateTime.of(local, ZoneId.of("America/New_York"));
+                return new Task(taskName.getText(), (Task) parentComboBox.getSelectionModel().getSelectedItem(), taskDetails.getText(), zonedDueDate);
+            }
+
             // If name, details, duedate, & location are filled in
             if (taskName.getText() != null && taskDetails.getText() != null && taskDue.getValue() != null && location.getText() != null)
             {
@@ -119,6 +140,9 @@ public class InputController implements Initializable
                 ZonedDateTime zonedDueDate = ZonedDateTime.of(local, ZoneId.of("America/New_York"));
                 return new Task(taskName.getText(), taskDetails.getText(), zonedDueDate);
             }
+
+
+
             return new Task(taskName.getText(), taskDetails.getText());
         }
         catch (ReferenceNotInitializedException e)
