@@ -12,6 +12,10 @@ import java.util.NoSuchElementException;
 
 public class UserData {
 
+   public static final String dbAddress = "jdbc:mysql://sql5.freesqldatabase.com:3306/sql5393891";
+   public static final String dbUser = "sql5393891";
+   public static final String dbPassword = "j9mPmDpmpq";
+
    private static int id;
    private static String username;
    private static Stage activeStage;
@@ -74,7 +78,7 @@ public class UserData {
 
         LinkedList<Integer> databaseIDs = new LinkedList<Integer>();
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
         PreparedStatement pstmt = dbConnection.prepareStatement("SELECT taskid FROM tasks WHERE userid = ?");
         pstmt.setInt(1, UserData.getid());
         ResultSet taskIDResults = pstmt.executeQuery();

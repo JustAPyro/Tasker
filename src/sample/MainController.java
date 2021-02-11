@@ -120,6 +120,10 @@ public class MainController implements Initializable
             java.awt.MenuItem newTask = new java.awt.MenuItem("New Task");
             newTask.addActionListener(event -> Platform.runLater(this::newTaskButton));
 
+            // Adding a button & Action listener for a next task due button
+            java.awt.MenuItem nextTask = new java.awt.MenuItem("Open Next Task Due");
+            nextTask.addActionListener(event -> Platform.runLater(this::nextTaskButton));
+
             java.awt.MenuItem exitItem = new java.awt.MenuItem("Exit");
             exitItem.addActionListener(event -> {
                 Platform.exit();
@@ -129,6 +133,7 @@ public class MainController implements Initializable
 
             trayPopupMenu.add(openItem);
             trayPopupMenu.add(newTask);
+            trayPopupMenu.add(nextTask);
             trayPopupMenu.addSeparator();
             trayPopupMenu.add(exitItem);
             trayIcon.setPopupMenu(trayPopupMenu);
@@ -195,6 +200,12 @@ public class MainController implements Initializable
         taskTable.getItems().add(newTask);
     }
 
+    // Is called on the selection of Next Task from the tray icon
+    public void nextTaskButton()
+    {
+
+    }
+
     public void completeTask()
     {
         Task task = (Task) taskTable.getSelectionModel().getSelectedItem();
@@ -223,7 +234,7 @@ public class MainController implements Initializable
     private void loadTasks(int userid, TableView taskView)
     {
         try {
-            Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+            Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
             PreparedStatement pstmt = dbConnection.prepareStatement("SELECT taskid, userid, parentid, abstract, name, details, location, duedate, createdate, recurring FROM tasks WHERE userid = ?");
             pstmt.setInt(1, UserData.getid());
             ResultSet taskResults = pstmt.executeQuery();
@@ -249,7 +260,7 @@ public class MainController implements Initializable
 
     private void loadTasks(int userid) {
         try {
-            Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+            Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
             PreparedStatement pstmt = dbConnection.prepareStatement("SELECT name, details, duedate FROM tasks WHERE id = ?");
             pstmt.setInt(1, UserData.getid());
             ResultSet taskResults = pstmt.executeQuery();

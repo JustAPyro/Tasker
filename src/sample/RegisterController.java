@@ -41,7 +41,7 @@ public class RegisterController implements Initializable
 
 
             // Attempt to establish connection with database
-            dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+            dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
 
 
         }
@@ -134,6 +134,8 @@ public class RegisterController implements Initializable
             return;
         }
 
+        java.sql.Date datenow = new java.sql.Date(System.currentTimeMillis());
+
 
         /////////////////////////////////////////////////////////////////////////////
         // - Done validating input, below is where the actual user is registered - //
@@ -167,16 +169,18 @@ public class RegisterController implements Initializable
 
         try {
             PreparedStatement insertNewUser = dbConnection.prepareStatement // Create SQL statement to insert new values
-                    ("INSERT INTO users (id, username, firstname, lastname, email, phone, password, salt) VALUES (0, ?, ?, ?, ?, ?, ?, ?)");
+                    ("INSERT INTO users (id, username, firstname, lastname, email, phone, datecreate, dateactivity, password, salt) VALUES (0, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             insertNewUser.setString(1, usernameField.getText()); // Sets the username
             insertNewUser.setString(2, firstNameField.getText()); // sets the first name
             insertNewUser.setString(3, lastNameField.getText()); // sets the last name
             insertNewUser.setString(4, emailField.getText()); // Sets the email
             insertNewUser.setString(5, phoneField.getText()); // Sets the phone number field
-            insertNewUser.setBytes(6, hashedPass); // Set our newly created hashed password
-            insertNewUser.setBytes(7, saltShaker); // Store the players salt as well
-            insertNewUser.executeUpdate();
-            insertNewUser.close();
+            insertNewUser.setDate(6, datenow); // Sets the user create date to now
+            insertNewUser.setDate(7, datenow); // Since it's a new account, last activity is also now
+            insertNewUser.setBytes(8, hashedPass); // Set our newly created hashed password
+            insertNewUser.setBytes(9, saltShaker); // Store the players salt as well
+            insertNewUser.executeUpdate(); // Executes the update to SQL server
+            insertNewUser.close(); // closes the prepared statement
 
         } catch (SQLException sqle) {
             invalidEntryPopup("Connection Error", "Warning: Couldn't establish connection to SQL server");

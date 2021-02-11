@@ -77,7 +77,7 @@ public class Task
         recurring = 0; // Since not specified, assume it's not a recurring task
 
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
 
         // Create a prepared statement inserting the values we have
         PreparedStatement insertion = dbConnection.prepareStatement(
@@ -111,7 +111,7 @@ public class Task
         createDate = ZonedDateTime.now();
         recurring = 0;
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
         PreparedStatement insertion = dbConnection.prepareStatement("INSERT INTO tasks (userid, parentid, abstract, name, details, createdate) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         insertion.setInt(1, userid);
         insertion.setInt(2, parentid);
@@ -146,7 +146,7 @@ public class Task
         recurring = 0; // Since not specified, assume it's not a recurring task
 
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
 
         // Create a prepared statement inserting the values we have
         PreparedStatement insertion = dbConnection.prepareStatement(
@@ -182,7 +182,7 @@ public class Task
         recurring = 0; // Since not specified, assume it's not a recurring task
 
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
 
         // Create a prepared statement inserting the values we have
         PreparedStatement insertion = dbConnection.prepareStatement(
@@ -218,7 +218,7 @@ public class Task
         recurring = 0; // Since not specified, assume it's not a recurring task
 
 
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
 
         // Create a prepared statement inserting the values we have
         PreparedStatement insertion = dbConnection.prepareStatement(
@@ -278,7 +278,7 @@ public class Task
     }
 
     public void removeTask() throws SQLException {
-        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+        Connection dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
         PreparedStatement deletion = dbConnection.prepareStatement("DELETE FROM tasks WHERE taskid=?");
         deletion.setInt(1, taskid);
         deletion.executeUpdate();

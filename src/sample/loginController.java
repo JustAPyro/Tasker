@@ -35,7 +35,7 @@ public class loginController implements Initializable
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            dbConnection = DriverManager.getConnection("jdbc:mysql://sql5.freesqldatabase.com:3306/sql5390450", "sql5390450", "y64muxBbiV");
+            dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
             //Statement stmt = con.createStatement();
             //ResultSet rs = stmt.executeQuery("SELECT * FROM users");
 
