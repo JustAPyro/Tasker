@@ -60,6 +60,20 @@ public class Task
         this.recurring = recurring;
     }
 
+    // This is the parent creation (uploading to database) constructor- All other constructors just adjust values and call this
+    public Task(int parentID, boolean isabstract, String name, String details, String location, ZonedDateTime dueDate, int recurring)
+    {
+        this.taskid = 0;                    // Placeholder, we will get this from the server after upload
+        this.parentid = UserData.getid();   // UserID will always be the native clients userID
+        this.isabstract = isabstract;       // Update isabstract
+        this.name = name;                   // Update the name field
+        this.details = details;             // Update the detail field
+        this.location = location;           // Update location
+        this.dueDate = dueDate;             // Update the duedate
+        this.createDate = ZonedDateTime.now(); // Create date should be set to now
+        this.recurring = recurring;         // Update recurring
+    }
+
     // Simplest constructor, just requires name and details (Note: This pushes to server)
     public Task(String name, String details)  throws ReferenceNotInitializedException, SQLException {
 
