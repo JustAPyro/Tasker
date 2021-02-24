@@ -12,9 +12,11 @@ import java.util.NoSuchElementException;
 
 public class UserData {
 
-   public static final String dbAddress = "jdbc:mysql://sql5.freesqldatabase.com:3306/sql5393891";
-   public static final String dbUser = "sql5393891";
-   public static final String dbPassword = "j9mPmDpmpq";
+   public static final String dbAddress = "jdbc:mysql://sql473.main-hosting.eu:3306/u375142563_Tasker?autoReconnect=true";
+   public static final String dbUser = "u375142563_root";
+   public static final String dbPassword = "Tasker2021";
+
+   public static final Boolean testing = true;
 
    private static int id;
    private static String username;

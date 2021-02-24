@@ -36,21 +36,7 @@ public class RegisterController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // Try to establish connectivity
-        try {
 
-
-            // Attempt to establish connection with database
-            dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
-
-
-        }
-        catch (SQLException sqle)
-        {
-            // If there's an SQL error let the user know and print stack trace
-            invalidEntryPopup("Connection Error", "Warning: Couldn't establish connection to SQL server");
-            sqle.printStackTrace(); // TODO: Set this to print to an error file
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -111,8 +97,15 @@ public class RegisterController implements Initializable
         // Checks against the SQL database to make sure the username isn't taken
         try {
 
+            // Attempt to establish connection with database
+            dbConnection = DriverManager.getConnection(UserData.dbAddress, UserData.dbUser, UserData.dbPassword);
+
+            // If testing is true print to console that connection was valid
+            if (UserData.testing == true) { System.out.println("Connection to SQL Server Established."); }
+
             // Prepare a statement to pull all usernames
             PreparedStatement getUsernames = dbConnection.prepareStatement("SELECT username FROM users");
+
 
             // Get the results of username query
             ResultSet currentUsers = getUsernames.executeQuery();
@@ -181,6 +174,9 @@ public class RegisterController implements Initializable
             insertNewUser.setBytes(9, saltShaker); // Store the players salt as well
             insertNewUser.executeUpdate(); // Executes the update to SQL server
             insertNewUser.close(); // closes the prepared statement
+
+            // If testing mode is enabled print info to console
+            if (UserData.testing == true) { System.out.println("Successfully Executed SQL Update Statement"); }
 
         } catch (SQLException sqle) {
             invalidEntryPopup("Connection Error", "Warning: Couldn't establish connection to SQL server");
