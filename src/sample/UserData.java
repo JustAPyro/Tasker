@@ -20,14 +20,29 @@ public class UserData {
 
    private static int id;
    private static String username;
+   private static String firstName;
    private static Stage activeStage;
 
    private static LinkedList<Task> allTasks = new LinkedList<Task>();
 
-    public static void setid(int newid, String newusername)
+    /**
+     * Sets the first name stored in the static UserData class
+     *
+     * @param newFirstName Represents the users first name.
+     */
+    public static void setFirstName(String newFirstName)
     {
-        id = newid;
-        username = newusername;
+        firstName = newFirstName;
+    }
+
+    /**
+     * Returns the first name saved into the static UserData
+     *
+     * @return The first name of user.
+     */
+    public static String getFirstName()
+    {
+        return firstName;
     }
 
     public static int getid()

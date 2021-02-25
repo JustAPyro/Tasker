@@ -55,7 +55,7 @@ public class loginController implements Initializable
         {
 
 
-            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT id, username, password, salt FROM users WHERE username=?");
+            PreparedStatement pstmt = dbConnection.prepareStatement("SELECT id, username, firstname, password, salt FROM users WHERE username=?");
             pstmt.setString(1, username);
             ResultSet results = pstmt.executeQuery();
 
@@ -73,6 +73,8 @@ public class loginController implements Initializable
 
             MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(results.getBytes("salt"));
+
+            // Save the first name of the user into UserData
 
 
             if (Arrays.equals(results.getBytes("password"), (md.digest(passwordInput.getText().getBytes()))))
