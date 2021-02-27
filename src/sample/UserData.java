@@ -45,6 +45,18 @@ public class UserData {
         return firstName;
     }
 
+    /**
+     * Sets the new id to be saved into user data.
+     *
+     * @param newid The ID you want saved into user Data in ram.
+     */
+    public static void setid(int newid)
+    {
+        // Set the static id to new id
+        id = newid;
+    }
+
+
     public static int getid()
     {
         return id;
