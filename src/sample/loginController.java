@@ -79,7 +79,12 @@ public class loginController implements Initializable
 
             if (Arrays.equals(results.getBytes("password"), (md.digest(passwordInput.getText().getBytes()))))
             {
-                UserData.setid(results.getInt("id"), results.getString("username"));
+                // Save the ID for userdata so we don't have to pull it over and over
+                UserData.setid(results.getInt("id"));
+
+                // While we're here we might as well also save the user first name
+                UserData.setFirstName(results.getString("firstname"));
+
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("Main.fxml"));
                 Scene newScene;
                 newScene = new Scene(loader.load());

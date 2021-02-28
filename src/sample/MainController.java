@@ -81,7 +81,7 @@ public class MainController implements Initializable
         }
         */
 
-        welcomeLabel.setText("Welcome " + UserData.getUsername() + "!");
+        welcomeLabel.setText("Welcome " + UserData.getFirstName() + "!");
 
         // Sets up the tray icon (using awt code run on swing thread)
         javax.swing.SwingUtilities.invokeLater(this::addAppToTray);

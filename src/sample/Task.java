@@ -60,6 +60,8 @@ public class Task
         this.recurring = recurring;
     }
 
+
+
     // This is the parent creation (uploading to database) constructor- All other constructors just adjust values and call this
     public Task(int parentID, boolean isabstract, String name, String details, String location, ZonedDateTime dueDate, int recurring)
     {
@@ -324,6 +326,10 @@ public class Task
 
         Task returnTask;
         returnTask = loader.<InputController>getController().getTask();
+
+        // If testing inform the console that this method executed
+        if (UserData.testing) { System.out.println("newTaskPopup executed and retrieved task."); }
+
         return returnTask;
     }
 
